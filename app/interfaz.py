@@ -62,29 +62,50 @@ class VentanaPrincipal:
         ventana = tk.Toplevel(self.master)
         ventana.title("Registrar Participante")
         ventana.geometry("400x300")
+        
+        # Variables de control
+        self.nombre_var = tk.StringVar()
+        self.edad_var = tk.IntVar(value=10)
+        self.taller_var = tk.StringVar(value="Pintura")
+        self.mes_var = tk.StringVar(value="Enero")
+        self.clases_var = tk.IntVar(value=1)
+
 
         # Labels y Entradas
+        
+        # Nombre
         tk.Label(ventana, text="Nombre:").grid(row=0, column=0, padx=10, pady=10, sticky="w")
-        entrada_nombre = tk.Entry(ventana)
-        entrada_nombre.grid(row=0, column=1)
+        tk.Entry(ventana, textvariable=self.nombre_var).grid(row=0, column=1)
 
+        # Edad
         tk.Label(ventana, text="Edad:").grid(row=1, column=0, padx=10, pady=10, sticky="w")
-        entrada_edad = tk.Entry(ventana)
-        entrada_edad.grid(row=1, column=1)
+        tk.Spinbox(ventana, from_=5, to=100, textvariable=self.edad_var).grid(row=1, column=1)
 
+        # Taller
         tk.Label(ventana, text="Taller:").grid(row=2, column=0, padx=10, pady=10, sticky="w")
-        talleres = ["Pintura", "Teatro", "Música", "Danza"]
-        variable_taller = tk.StringVar(value=talleres[0])
-        menu_taller = tk.OptionMenu(ventana, variable_taller, *talleres)
-        menu_taller.grid(row=2, column=1)
+        opciones_taller = ["Pintura", "Teatro", "Música", "Danza"]
+        tk.OptionMenu(ventana, self.taller_var, *opciones_taller).grid(row=2, column=1)
 
+        # Mes
         tk.Label(ventana, text="Mes:").grid(row=3, column=0, padx=10, pady=10, sticky="w")
-        entrada_mes = tk.Entry(ventana)
-        entrada_mes.grid(row=3, column=1)
+        meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+        tk.OptionMenu(ventana, self.mes_var, *meses).grid(row=3, column=1)
 
+        # Clases asistidas
         tk.Label(ventana, text="Número de clases:").grid(row=4, column=0, padx=10, pady=10, sticky="w")
-        entrada_clases = tk.Entry(ventana)
-        entrada_clases.grid(row=4, column=1)
+        tk.Spinbox(ventana, from_=1, to=31, textvariable=self.clases_var).grid(row=4, column=1)
+
+        # Boton para registrar
+        tk.Button(ventana, text="Registrar", command=self.registrar_participante).grid(row=5, column=0, columnspan=2, pady=20)
+
+    def registrar_participante(self):
+        """
+        Función que se llamará al presionar el botón de registrar.
+        Validará los datos y usará el gestor para registrar el participante.
+        """
+        pass
+
         
         def guardar_participante():
             """
