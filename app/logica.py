@@ -80,11 +80,11 @@ class GestorParticipantes:
     Permite registrar, modificar, eliminar y consultar participantes.
     """
 
-    def __init__(self, ruta_archivo):
+    def __init__(self, ruta="app/datos/participantes.csv"):
         """
         Inicializa la lista o estructura de datos para almacenar participantes.
         """
-        self.ruta = ruta_archivo
+        self.ruta = ruta
         self.participantes = []
         self.cargar_desde_archivo()
 
@@ -128,7 +128,7 @@ class GestorParticipantes:
         """
         return self.participantes
 
-    def guardar_en_archivo(self, ruta):
+    def guardar_en_archivo(self):
         """
         Guarda todos los participantes en un archivo CSV.
 
@@ -143,7 +143,7 @@ class GestorParticipantes:
             for p in self.participantes:
                 writer.writerow(p.to_dict())
 
-    def cargar_desde_archivo(self, ruta):
+    def cargar_desde_archivo(self):
         """
         Carga los participantes desde un archivo CSV.
 

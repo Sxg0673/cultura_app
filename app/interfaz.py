@@ -1,8 +1,10 @@
-from logica import GestorParticipantes
-from analisis import Analisis
+from app.logica import GestorParticipantes, Participante
+from app.analisis import Analisis
 
 import tkinter as tk
 from tkinter import messagebox
+# https://www.youtube.com/watch?v=sQRrtdbA6jc
+from tkinter import ttk # https://www.tutorialesprogramacionya.com/pythonya/detalleconcepto.php?punto=63&codigo=63&inicio=60
 
 class VentanaPrincipal:
     """
@@ -17,9 +19,7 @@ class VentanaPrincipal:
         Args:
             master: ventana raíz de Tkinter.
         """
-        from app.logica import GestorParticipantes, Participante
         self.gestor = GestorParticipantes()
-
         self.master = master
         self.master.title("Sistema de Talleres Culturales")
         self.master.geometry("600x400")
@@ -102,7 +102,7 @@ class VentanaPrincipal:
         # Boton para registrar
         tk.Button(ventana, text="Registrar", command=self.registrar_participante).grid(row=5, column=0, columnspan=2, pady=20)
 
-   def registrar_participante(self):
+    def registrar_participante(self):
         """
         Valida los datos ingresados, crea un participante y lo registra usando el gestor.
         Muestra mensajes de éxito o error al usuario.
@@ -126,7 +126,7 @@ class VentanaPrincipal:
                 clases_asistidas=int(clases)
             )
 
-            self.gestor.agregar_participante(participante)
+            self.gestor.registrar_participante(participante)
             messagebox.showinfo("Éxito", f"Participante {nombre} registrado correctamente.")
 
         except Exception as e:
@@ -134,30 +134,30 @@ class VentanaPrincipal:
 
 
         
-        def guardar_participante():
-            """
-            Toma los datos del formulario, valida que estén completos, los transforma y los guarda.
-            """
-            nombre = entrada_nombre.get().strip()
-            edad = entrada_edad.get().strip()
-            taller = variable_taller.get()
-            mes = entrada_mes.get().strip()
-            clases = entrada_clases.get().strip()
+    def guardar_participante():
+        """
+        Toma los datos del formulario, valida que estén completos, los transforma y los guarda.
+        """
+        nombre = entrada_nombre.get().strip()
+        edad = entrada_edad.get().strip()
+        taller = variable_taller.get()
+        mes = entrada_mes.get().strip()
+        clases = entrada_clases.get().strip()
 
-            if not nombre or not edad or not mes or not clases:
-                messagebox.showerror("Error", "Por favor complete todos los campos.")
-                return
+        if not nombre or not edad or not mes or not clases:
+            messagebox.showerror("Error", "Por favor complete todos los campos.")
+            return
 
-            try:
-                edad = int(edad)
-                clases = int(clases)
-            except ValueError:
-                messagebox.showerror("Error", "Edad y número de clases deben ser números.")
-                return
+        try:
+            edad = int(edad)
+            clases = int(clases)
+        except ValueError:
+            messagebox.showerror("Error", "Edad y número de clases deben ser números.")
+            return
 
-            self.gestor.registrar_participante(nombre, edad, taller, mes, clases)
-            messagebox.showinfo("Éxito", "Participante registrado correctamente.")
-            ventana.destroy()
+        self.gestor.registrar_participante(nombre, edad, taller, mes, clases)
+        messagebox.showinfo("Éxito", "Participante registrado correctamente.")
+        ventana.destroy()
 
         # Botón para guardar
         boton_guardar = tk.Button(ventana, text="Guardar", command=guardar_participante)
@@ -177,9 +177,28 @@ class VentanaPrincipal:
 
     def mostrar_registros(self):
         """
-        Muestra todos los registros de participantes en una nueva ventana o tabla.
+        Abre una ventana con una tabla que muestra todos los participantes registrados.
         """
-        pass
+        ventana = tk.Toplevel(self.master)
+        ventana.title("Listado de Participantes")
+        ventana.geometry("700x400")
+
+        # Crear Treeview
+        columnas = ("Nombre", "Edad", "Taller", "Mes", "Clases", "Pago")
+        tabla = ttk.Treeview(ventana, columns=columnas, show="headings")
+        
+        for col in columnas:
+            tabla.heading(col, text=col)
+            tabla.column(col, width=100, anchor="center")
+
+        tabla.pack(expand=True, fill="both", padx=10, pady=10)
+
+        # Insertar datos
+        for p in self.gestor.participantes:
+            tabla.insert("", "end", values=(
+                p.nombre, p.edad, p.taller, p.mes, p.clases_asistidas, p.calcular_pago()
+            ))
+
 
     def abrir_menu_reporte(self):
         """
