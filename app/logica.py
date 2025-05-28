@@ -42,7 +42,7 @@ class Participante:
         """
         pass
 
-    def actualizar_datos(self, **kwargs):
+    def actualizar_datos(self, **kwargs): # https://python-intermedio.readthedocs.io/es/latest/args_and_kwargs.html
         """
         Permite actualizar uno o varios atributos del participante.
         Por ejemplo: edad, mes o número de clases. También recalcula el valor pagado.
