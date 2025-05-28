@@ -26,16 +26,34 @@ class VentanaPrincipal:
 
     def configurar_grid(self):
         """
-        Configura la estructura de la cuadrícula para el posicionamiento con grid().
+        Configura la estructura de la cuadrícula principal para colocar los botones.
+        Se define un layout de 3 filas y 2 columnas con expansión proporcional.
         """
-        pass
+        for i in range(3):
+            self.master.rowconfigure(i, weight=1)
+        for j in range(2):
+            self.master.columnconfigure(j, weight=1)
 
     def crear_widgets(self):
         """
-        Crea los botones principales de la interfaz y los posiciona en la ventana.
-        Cada botón está asociado a una funcionalidad del sistema.
+        Crea y posiciona los botones principales que permiten acceder a las funcionalidades:
+        registrar, modificar, eliminar, ver registros y generar reportes.
         """
-        pass
+        boton_registrar = tk.Button(self.master, text="Registrar Participante", command=self.abrir_formulario_registro)
+        boton_registrar.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+        boton_modificar = tk.Button(self.master, text="Modificar Participante", command=self.abrir_formulario_modificar)
+        boton_modificar.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+
+        boton_eliminar = tk.Button(self.master, text="Eliminar Participante", command=self.abrir_formulario_eliminar)
+        boton_eliminar.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+
+        boton_ver_registros = tk.Button(self.master, text="Ver Registros", command=self.mostrar_registros)
+        boton_ver_registros.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
+
+        boton_reportes = tk.Button(self.master, text="Generar Reporte", command=self.abrir_menu_reporte)
+        boton_reportes.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
 
     def abrir_formulario_registro(self):
         """
