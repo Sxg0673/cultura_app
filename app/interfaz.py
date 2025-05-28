@@ -164,16 +164,76 @@ class VentanaPrincipal:
         boton_guardar.grid(row=5, column=0, columnspan=2, pady=20)
 
     def abrir_formulario_modificar(self):
-        """
-        Abre una ventana para buscar y modificar datos de un participante.
-        """
-        pass
+        ventana = tk.Toplevel(self.master)
+        ventana.title("Modificar Participante")
+        ventana.geometry("400x350")
+
+        tk.Label(ventana, text="Nombre del participante a modificar:").grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        nombre_buscar = tk.Entry(ventana)
+        nombre_buscar.grid(row=0, column=1)
+
+        # Nuevos datos
+        campos = {
+            "Edad": tk.IntVar(),
+            "Taller": tk.StringVar(value="Pintura"),
+            "Mes": tk.StringVar(value="Enero"),
+            "Clases asistidas": tk.IntVar()
+        }
+
+        tk.Label(ventana, text="Edad nueva:").grid(row=1, column=0, padx=10, pady=5, sticky="w")
+        tk.Spinbox(ventana, from_=5, to=100, textvariable=campos["Edad"]).grid(row=1, column=1)
+
+        tk.Label(ventana, text="Nuevo taller:").grid(row=2, column=0, padx=10, pady=5, sticky="w")
+        opciones = ["Pintura", "Teatro", "Música", "Danza"]
+        tk.OptionMenu(ventana, campos["Taller"], *opciones).grid(row=2, column=1)
+
+        tk.Label(ventana, text="Nuevo mes:").grid(row=3, column=0, padx=10, pady=5, sticky="w")
+        meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+        tk.OptionMenu(ventana, campos["Mes"], *meses).grid(row=3, column=1)
+
+        tk.Label(ventana, text="Nuevas clases:").grid(row=4, column=0, padx=10, pady=5, sticky="w")
+        tk.Spinbox(ventana, from_=1, to=31, textvariable=campos["Clases asistidas"]).grid(row=4, column=1)
+
+        def modificar():
+            nombre = nombre_buscar.get().strip()
+            if not nombre:
+                messagebox.showerror("Error", "Debe ingresar el nombre.")
+                return
+            self.gestor.modificar_participante(
+                nombre,
+                edad=campos["Edad"].get(),
+                taller=campos["Taller"].get(),
+                mes=campos["Mes"].get(),
+                clases_asistidas=campos["Clases asistidas"].get()
+            )
+            messagebox.showinfo("Éxito", "Participante modificado.")
+            ventana.destroy()
+
+        tk.Button(ventana, text="Modificar", command=modificar).grid(row=5, column=0, columnspan=2, pady=20)
+
 
     def abrir_formulario_eliminar(self):
         """
         Abre una ventana para buscar y eliminar un participante.
         """
-        pass
+        ventana = tk.Toplevel(self.master)
+        ventana.title("Eliminar Participante")
+        ventana.geometry("350x150")
+
+        tk.Label(ventana, text="Nombre del participante a eliminar:").pack(pady=10)
+        entrada_nombre = tk.Entry(ventana)
+        entrada_nombre.pack()
+
+        def eliminar():
+            nombre = entrada_nombre.get().strip()
+            if not nombre:
+                messagebox.showerror("Error", "Debe ingresar un nombre.")
+                return
+            self.gestor.eliminar_participante(nombre)
+            messagebox.showinfo("Éxito", f"Participante '{nombre}' eliminado.")
+            ventana.destroy()
+
+        tk.Button(ventana, text="Eliminar", command=eliminar).pack(pady=10)
 
     def mostrar_registros(self):
         """
@@ -208,7 +268,41 @@ class VentanaPrincipal:
         - Taller más popular
         - Gráficos: barras, pie, histograma
         """
-        pass
+    
+        ventana = tk.Toplevel(self.master)
+        ventana.title("Reportes y Análisis")
+        ventana.geometry("400x300")
+
+        analisis = Analisis(self.gestor.obtener_todos())
+
+        def mostrar_total():
+            total = analisis.total_participantes()
+            messagebox.showinfo("Total participantes", f"Total: {total}")
+
+        def mostrar_top():
+            top = analisis.participante_top()
+            messagebox.showinfo("Participante Top", f"Mayor pago: {top}")
+
+        def mostrar_popular():
+            popular = analisis.taller_mas_popular()
+            messagebox.showinfo("Taller más popular", f"Taller: {popular}")
+
+        def graficar_1():
+            analisis.graficar_participacion()
+
+        def graficar_2():
+            analisis.graficar_edades()
+
+        def graficar_3():
+            analisis.graficar_pie_talleres()
+
+        tk.Button(ventana, text="Total participantes", command=mostrar_total).pack(pady=5)
+        tk.Button(ventana, text="Participante con mayor pago", command=mostrar_top).pack(pady=5)
+        tk.Button(ventana, text="Taller más popular", command=mostrar_popular).pack(pady=5)
+        tk.Button(ventana, text="Gráfico de participación", command=graficar_1).pack(pady=5)
+        tk.Button(ventana, text="Gráfico de edades", command=graficar_2).pack(pady=5)
+        tk.Button(ventana, text="Gráfico de distribución por taller", command=graficar_3).pack(pady=5)
+
 
 # Ejecución del programa
 if __name__ == "__main__":
