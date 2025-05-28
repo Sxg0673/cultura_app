@@ -1,3 +1,6 @@
+from logica import GestorParticipantes
+from analisis import Analisis
+
 import tkinter as tk
 from tkinter import messagebox
 
@@ -38,7 +41,32 @@ class VentanaPrincipal:
         """
         Abre una nueva ventana para registrar un nuevo participante.
         """
-        pass
+        ventana = tk.Toplevel(self.master)
+        ventana.title("Registrar Participante")
+        ventana.geometry("400x300")
+
+        # Labels y Entradas
+        tk.Label(ventana, text="Nombre:").grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        entrada_nombre = tk.Entry(ventana)
+        entrada_nombre.grid(row=0, column=1)
+
+        tk.Label(ventana, text="Edad:").grid(row=1, column=0, padx=10, pady=10, sticky="w")
+        entrada_edad = tk.Entry(ventana)
+        entrada_edad.grid(row=1, column=1)
+
+        tk.Label(ventana, text="Taller:").grid(row=2, column=0, padx=10, pady=10, sticky="w")
+        talleres = ["Pintura", "Teatro", "Música", "Danza"]
+        variable_taller = tk.StringVar(value=talleres[0])
+        menu_taller = tk.OptionMenu(ventana, variable_taller, *talleres)
+        menu_taller.grid(row=2, column=1)
+
+        tk.Label(ventana, text="Mes:").grid(row=3, column=0, padx=10, pady=10, sticky="w")
+        entrada_mes = tk.Entry(ventana)
+        entrada_mes.grid(row=3, column=1)
+
+        tk.Label(ventana, text="Número de clases:").grid(row=4, column=0, padx=10, pady=10, sticky="w")
+        entrada_clases = tk.Entry(ventana)
+        entrada_clases.grid(row=4, column=1)
 
     def abrir_formulario_modificar(self):
         """
