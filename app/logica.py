@@ -95,7 +95,8 @@ class GestorParticipantes:
         Args:
             participante (Participante): Objeto participante previamente creado.
         """
-        pass
+        self.participantes.append(participante)
+        self.guardar_en_archivo()
 
     def modificar_participante(self, nombre, **kwargs):
         """
@@ -105,7 +106,11 @@ class GestorParticipantes:
             nombre (str): Nombre del participante a buscar.
             kwargs: Campos a modificar (edad, taller, etc.)
         """
-        pass
+        for p in self.participantes:
+            if p.nombre == nombre:
+                p.actualizar_datos(**kwargs)
+                break
+        self.guardar_en_archivo()
 
     def eliminar_participante(self, nombre):
         """
@@ -114,13 +119,14 @@ class GestorParticipantes:
         Args:
             nombre (str): Nombre del participante a eliminar.
         """
-        pass
+        self.participantes = [p for p in self.participantes if p.nombre != nombre]
+        self.guardar_en_archivo()
 
     def obtener_todos(self):
         """
         Devuelve la lista completa de participantes registrados.
         """
-        pass
+        return self.participantes
 
     def guardar_en_archivo(self, ruta):
         """
@@ -129,7 +135,13 @@ class GestorParticipantes:
         Args:
             ruta (str): Ruta donde se almacenará el archivo.
         """
-        pass
+        with open(self.ruta, mode='w', newline='') as archivo:
+            writer = csv.DictWriter(archivo, fieldnames=[
+                "nombre", "edad", "taller", "mes", "clases_asistidas", "valor_pagado"
+            ])
+            writer.writeheader()
+            for p in self.participantes:
+                writer.writerow(p.to_dict())
 
     def cargar_desde_archivo(self, ruta):
         """
