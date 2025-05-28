@@ -1,8 +1,6 @@
 nombre,edad,taller,mes,clases_asistidas,valor_pagado
-abc,9,Danza,Febrero,10,70000
-abc,10,Música,Enero,4,40000
 hola,14,Música,Enero,6,60000
 juan,7,Pintura,Enero,15,90000
-a,10,Pintura,Enero,1,6000
+a,15,Danza,Mayo,9,63000
 b,10,Pintura,Enero,2,12000
 c,10,Música,Enero,4,40000

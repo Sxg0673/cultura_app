@@ -66,5 +66,5 @@ conda activate cultura_app
 3. Ejecuta el archivo de la interfaz:
 
 ```bash
-python app/interfaz.py
+python -m app.interfaz
 ```
