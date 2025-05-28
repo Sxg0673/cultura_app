@@ -1,3 +1,6 @@
+import csv
+import os
+
 class Participante:
     """
     Representa a un participante de un taller cultural.
@@ -24,28 +27,52 @@ class Participante:
         Inicializa un nuevo participante con sus datos básicos.
         Calcula automáticamente el valor pagado con base en taller y clases.
         """
-        pass  
+        self.nombre = nombre
+        self.edad = edad
+        self.taller = taller
+        self.mes = mes
+        self.clases_asistidas = clases_asistidas
+        self.valor_pagado = self.calcular_pago()  
 
     def calcular_pago(self):
         """
         Calcula el valor total a pagar según el número de clases asistidas
         y el taller inscrito. Retorna un entero con el valor total.
         """
-        pass
+        # Obtengo el taller y me aseguro que se encuentre en los talleres establecidos y cambia el valor 0 por el del taller
+        tarifa = self.tarifas_por_taller.get(self.taller, 0) 
+        return tarifa * self.clases_asistidas
 
     def to_dict(self):
         """
         Devuelve un diccionario con los atributos del participante.
         Útil para integrarse con pandas o para exportación de datos.
         """
-        pass
+        return {
+            "nombre": self.nombre,
+            "edad": self.edad,
+            "taller": self.taller,
+            "mes": self.mes,
+            "clases_asistidas": self.clases_asistidas,
+            "valor_pagado": self.valor_pagado
+        }
 
+    # De esta manera nos aseguramos de actualizar los datos que se quieran actualizar y no todos
     def actualizar_datos(self, **kwargs): # https://python-intermedio.readthedocs.io/es/latest/args_and_kwargs.html
         """
         Permite actualizar uno o varios atributos del participante.
         Por ejemplo: edad, mes o número de clases. También recalcula el valor pagado.
         """
-        pass
+        for clave, valor in kwargs.items():
+            # Esto verifica si existe
+            if hasattr(self, clave): # https://micro.recursospython.com/recursos/la-funcion-hasattr.html
+                # Esto lo actualiza
+                setattr(self, clave, valor) # https://www.w3schools.com/python/ref_func_setattr.asp
+                
+        # Recalcula el valor si se cambia el taller o las clases
+        if "taller" in kwargs or "clases_asistidas" in kwargs:
+            self.valor_pagado = self.calcular_pago()
+    
     
 class GestorParticipantes:
     """
