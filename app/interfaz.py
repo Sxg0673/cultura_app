@@ -17,6 +17,9 @@ class VentanaPrincipal:
         Args:
             master: ventana raíz de Tkinter.
         """
+        from app.logica import GestorParticipantes, Participante
+        self.gestor = GestorParticipantes()
+
         self.master = master
         self.master.title("Sistema de Talleres Culturales")
         self.master.geometry("600x400")
@@ -99,12 +102,36 @@ class VentanaPrincipal:
         # Boton para registrar
         tk.Button(ventana, text="Registrar", command=self.registrar_participante).grid(row=5, column=0, columnspan=2, pady=20)
 
-    def registrar_participante(self):
+   def registrar_participante(self):
         """
-        Función que se llamará al presionar el botón de registrar.
-        Validará los datos y usará el gestor para registrar el participante.
+        Valida los datos ingresados, crea un participante y lo registra usando el gestor.
+        Muestra mensajes de éxito o error al usuario.
         """
-        pass
+        nombre = self.nombre_var.get().strip()
+        edad = self.edad_var.get()
+        taller = self.taller_var.get()
+        mes = self.mes_var.get()
+        clases = self.clases_var.get()
+
+        if not nombre:
+            messagebox.showerror("Error", "El nombre no puede estar vacío.")
+            return
+
+        try:
+            participante = Participante(
+                nombre=nombre,
+                edad=int(edad),
+                taller=taller,
+                mes=mes,
+                clases_asistidas=int(clases)
+            )
+
+            self.gestor.agregar_participante(participante)
+            messagebox.showinfo("Éxito", f"Participante {nombre} registrado correctamente.")
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Ocurrió un error al registrar: {str(e)}")
+
 
         
         def guardar_participante():
