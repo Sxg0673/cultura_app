@@ -1,0 +1,12 @@
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Archivos de entorno y configuración
+.env
+.env.*
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
