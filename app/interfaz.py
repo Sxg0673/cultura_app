@@ -67,6 +67,35 @@ class VentanaPrincipal:
         tk.Label(ventana, text="Número de clases:").grid(row=4, column=0, padx=10, pady=10, sticky="w")
         entrada_clases = tk.Entry(ventana)
         entrada_clases.grid(row=4, column=1)
+        
+        def guardar_participante():
+            """
+            Toma los datos del formulario, valida que estén completos, los transforma y los guarda.
+            """
+            nombre = entrada_nombre.get().strip()
+            edad = entrada_edad.get().strip()
+            taller = variable_taller.get()
+            mes = entrada_mes.get().strip()
+            clases = entrada_clases.get().strip()
+
+            if not nombre or not edad or not mes or not clases:
+                messagebox.showerror("Error", "Por favor complete todos los campos.")
+                return
+
+            try:
+                edad = int(edad)
+                clases = int(clases)
+            except ValueError:
+                messagebox.showerror("Error", "Edad y número de clases deben ser números.")
+                return
+
+            self.gestor.registrar_participante(nombre, edad, taller, mes, clases)
+            messagebox.showinfo("Éxito", "Participante registrado correctamente.")
+            ventana.destroy()
+
+        # Botón para guardar
+        boton_guardar = tk.Button(ventana, text="Guardar", command=guardar_participante)
+        boton_guardar.grid(row=5, column=0, columnspan=2, pady=20)
 
     def abrir_formulario_modificar(self):
         """
