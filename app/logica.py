@@ -80,11 +80,13 @@ class GestorParticipantes:
     Permite registrar, modificar, eliminar y consultar participantes.
     """
 
-    def __init__(self):
+    def __init__(self, ruta_archivo):
         """
         Inicializa la lista o estructura de datos para almacenar participantes.
         """
-        pass
+        self.ruta = ruta_archivo
+        self.participantes = []
+        self.cargar_desde_archivo()
 
     def registrar_participante(self, participante):
         """
@@ -136,4 +138,22 @@ class GestorParticipantes:
         Args:
             ruta (str): Ruta del archivo con los datos.
         """
-        pass
+        if not os.path.exists(self.ruta):
+            with open(self.ruta, mode='w', newline='') as archivo:
+                writer = csv.DictWriter(archivo, fieldnames=[
+                    "nombre", "edad", "taller", "mes", "clases_asistidas", "valor_pagado"
+                ])
+                writer.writeheader()
+            return
+        
+        with open(self.ruta, mode='r', newline='') as archivo:
+            reader = csv.DictReader(archivo)
+            for fila in reader:
+                participante = Participante(
+                    nombre=fila["nombre"],
+                    edad=int(fila["edad"]),
+                    taller=fila["taller"],
+                    mes=fila["mes"],
+                    clases_asistidas=int(fila["clases_asistidas"])
+                )
+                self.participantes.append(participante)
